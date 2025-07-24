@@ -292,6 +292,10 @@
                         <div class="color-box" style="background-color: rgba(77, 166, 255, 0.3);"></div>
                         <span>End position</span>
                     </div>
+                    <div class = "legend-item">
+                       <div class="color-box" style="background-color: #4da6ff;"></div>
+                        <span>End gk position</span> 
+                    </div>
                 </div>
                 <button id="calculateBtn">Calculate xGOT</button>
             </div>
@@ -311,6 +315,7 @@
                         <span>GK final position</span>
                     </div>
                 </div>
+                <div class="status" id="zStatus">End Z: Not set, GK Z: Not set</div>
             </div>
             
             <div class="panel">
@@ -378,6 +383,7 @@
 
         let ballPosition = null;
         let goalkeeperPosition = null;
+        let goalkeeperendposition = null;
         let endPosition = null;
         let state = 'ball'; // ball -> goalkeeper -> players
         let shotZ = null;
@@ -416,6 +422,10 @@
                     break;
                 case 'goalkeeper':
                     goalkeeperPosition = { x: fieldY, y: fieldX };
+                    state = 'endgk';
+                    break;
+                case 'endgk':
+                    goalkeeperendposition = { x: fieldY, y: fieldX };
                     state = 'end';
                     break;
                 case 'end':
@@ -434,6 +444,9 @@
 
             gkStatus.textContent = goalkeeperPosition ? "Placed" : "Not placed";
             gkStatus.style.color = goalkeeperPosition ? "#4CAF50" : "#F44336";
+
+            gkendStatus.textContent = goalkeeperendposition ? "Placed" : "Not placed";
+            gkendStatus.style.color = goalkeeperendposition ? "#4CAF50" : "#F44336";
 
             playersStatus.textContent = endPosition ? "Placed" : "Not placed";
             playersStatus.style.color = endPosition ? "#4CAF50" : "#F44336";
@@ -463,10 +476,11 @@
                 const gk_z = gkZ !== null ? gkZ : 1.0;
                 const data = {
                     pos_balon: [ (canvasHeight/scaleY) - ballPosition.x, (canvasWidth/scaleX) - ballPosition.y,0.0],
-                    portero: [ (canvasHeight/scaleY) - goalkeeperPosition.x, (canvasWidth/scaleX) - goalkeeperPosition.y,gk_z],
+                    portero: [ (canvasHeight/scaleY) - goalkeeperPosition.x, (canvasWidth/scaleX) - goalkeeperPosition.y,0.0],
+                    porterofin: [(canvasHeight/scaleY) - goalkeeperendposition.x, (canvasWidth/scaleX) - goalkeeperendposition.y,gk_z],
                     end_pos: [ (canvasHeight/scaleY) - endPosition.x, (canvasWidth/scaleX) - endPosition.y, shotZ !== null ? shotZ : 1.22 ]
                 };
-
+                console.log("Datos enviados:", data);
                 // Send request to backend
                 const response = await fetch('/calculate_xsit', {
                     method: 'POST',
@@ -512,7 +526,12 @@
         function resetApp() {
             ballPosition = null;
             goalkeeperPosition = null;
+            goalkeeperendposition = null;
             endPosition = [];
+            shotZ = null;
+            shotZ_x = null;
+            gkZ = null;
+            gkZ_x = null;
             state = 'ball';
             xsitValue.textContent = "0.00";
             xsitValue.style.color = "#4da6ff";
