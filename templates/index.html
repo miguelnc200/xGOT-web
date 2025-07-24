@@ -362,7 +362,6 @@
         const ballpos = document.getElementById('ballpos');
         const calculateBtn = document.getElementById('calculateBtn');
         const resetBtn = document.getElementById('resetBtn');
-        const numPlayersInput = document.getElementById('numPlayers');
         const shotSpeedInput = document.getElementById('shotSpeed');
 
         // Field dimensions in meters
@@ -390,14 +389,9 @@
 
         // Event listeners
         canvas.addEventListener('click', handleCanvasClick);
-        numPlayersInput.addEventListener('change', updateNumPlayers);
         calculateBtn.addEventListener('click', calculateXSIT);
         resetBtn.addEventListener('click', resetApp);
 
-        function updateNumPlayers() {
-            numPlayers = parseInt(numPlayersInput.value);
-            playersStatus.textContent = `0 / ${numPlayers} placed`;
-        }
 
         function handleCanvasClick(event) {
             const rect = canvas.getBoundingClientRect();
