@@ -384,7 +384,9 @@
         let endPosition = null;
         let state = 'ball'; // ball -> goalkeeper -> players
         let shotZ = null;
+        let shotZ_x = null;
         let gkZ = null;
+        let gkZ_x = null;
 
         // Initialize field
         drawField();
@@ -668,13 +670,17 @@
             goalCanvas.addEventListener('click', (event) => {
                 const rect = goalCanvas.getBoundingClientRect();
                 const y = event.clientY - rect.top;
+                const x = event.clientX - rect.left;
+                
                 const z = ((goalCanvas.height - y) / goalCanvas.height) * 2.44;
         
                 if (zClickState === 'shot') {
                     shotZ = z;
+                    shotZ_x = x;
                     zClickState = 'gk';
                 } else {
                     gkZ = z;
+                    gkZ_x = x;
                     zClickState = 'shot';
                 }
         
@@ -695,8 +701,9 @@
         
                 if (shotZ !== null) {
                     const y = goalCanvas.height - (shotZ / 2.44) * goalCanvas.height;
+                    const x = goalCanvas.width - (shotZ / 2.44) * goalCanvas.width;
                     goalCtx.beginPath();
-                    goalCtx.arc(100, y, 6, 0, Math.PI * 2);
+                    goalCtx.arc(shotZ_x, y, 6, 0, Math.PI * 2);
                     goalCtx.fillStyle = '#ff4d4d';
                     goalCtx.fill();
                 }
@@ -704,7 +711,7 @@
                 if (gkZ !== null) {
                     const y = goalCanvas.height - (gkZ / 2.44) * goalCanvas.height;
                     goalCtx.beginPath();
-                    goalCtx.arc(300, y, 6, 0, Math.PI * 2);
+                    goalCtx.arc(gkZ_x, y, 6, 0, Math.PI * 2);
                     goalCtx.fillStyle = '#33cc33';
                     goalCtx.fill();
                 }
