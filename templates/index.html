@@ -267,14 +267,7 @@
                 <div class="canvas-container">
                     <canvas id="footballField" width="800" height="500"></canvas>
                 </div>
-                <div class="panel">
-                    <h2 class="panel-title">Goal View (Z)</h2>
-                    <div class="goal-container">
-                        <canvas id="goalCanvas" width="400" height="250"></canvas>
-                        <div class="position-help">(Click 1: End of shot / Click 2: GK height)</div>
-                    </div>
-                    <div class="status" id="zStatus">End Z: Not set, GK Z: Not set</div>
-                </div>
+                
                 <div class="legend">
                     <div class="legend-item">
                         <div class="color-box" style="background-color: #ff4d4d;"></div>
@@ -297,9 +290,16 @@
                         <span>Player effective area</span>
                     </div>
                 </div>
-                <button id="calculateBtn">Calculate xSIT</button>
+                <button id="calculateBtn">Calculate xGOT</button>
             </div>
-            
+            <div class="panel">
+                    <h2 class="panel-title">Goal View (Z)</h2>
+                    <div class="goal-container">
+                        <canvas id="goalCanvas" width="400" height="250"></canvas>
+                        <div class="position-help">(Click 1: End of shot / Click 2: GK height)</div>
+                    </div>
+                    <div class="status" id="zStatus">End Z: Not set, GK Z: Not set</div>
+                </div>
             <div class="panel">
                 <h2 class="panel-title">Configuration</h2>
 
