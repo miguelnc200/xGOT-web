@@ -659,64 +659,63 @@
             ctx.lineWidth = 1;
             ctx.stroke();
         }
-        const goalCanvas = document.getElementById('goalCanvas');
-        const goalCtx = goalCanvas.getContext('2d');
-        const zStatus = document.getElementById('zStatus');
-
-        let shotZ = null;
-        let gkZ = null;
-        let zClickState = 'shot'; // Alterna entre 'shot' y 'gk'
-
-        goalCanvas.addEventListener('click', (event) => {
-            const rect = goalCanvas.getBoundingClientRect();
-            const y = event.clientY - rect.top;
-
-            const z = ((goalCanvas.height - y) / goalCanvas.height) * 2.44;  // escala a 0–2.44 m
-
-            if (zClickState === 'shot') {
-                shotZ = z;
-                zClickState = 'gk';
-            } else {
-                gkZ = z;
-                zClickState = 'shot';
+        document.addEventListener("DOMContentLoaded", function () {
+            const goalCanvas = document.getElementById('goalCanvas');
+            const goalCtx = goalCanvas.getContext('2d');
+            const zStatus = document.getElementById('zStatus');
+        
+            let shotZ = null;
+            let gkZ = null;
+            let zClickState = 'shot';
+        
+            goalCanvas.addEventListener('click', (event) => {
+                const rect = goalCanvas.getBoundingClientRect();
+                const y = event.clientY - rect.top;
+                const z = ((goalCanvas.height - y) / goalCanvas.height) * 2.44;
+        
+                if (zClickState === 'shot') {
+                    shotZ = z;
+                    zClickState = 'gk';
+                } else {
+                    gkZ = z;
+                    zClickState = 'shot';
+                }
+        
+                drawGoalCanvas();
+                updateZStatus();
+            });
+        
+            function updateZStatus() {
+                const format = val => val !== null ? val.toFixed(2) + ' m' : 'Not set';
+                zStatus.textContent = `End Z: ${format(shotZ)}, GK Z: ${format(gkZ)}`;
             }
-
+        
+            function drawGoalCanvas() {
+                goalCtx.clearRect(0, 0, goalCanvas.width, goalCanvas.height);
+                goalCtx.strokeStyle = 'white';
+                goalCtx.lineWidth = 4;
+                goalCtx.strokeRect(50, 10, 300, 220);
+        
+                if (shotZ !== null) {
+                    const y = goalCanvas.height - (shotZ / 2.44) * goalCanvas.height;
+                    goalCtx.beginPath();
+                    goalCtx.arc(100, y, 6, 0, Math.PI * 2);
+                    goalCtx.fillStyle = '#ff4d4d';
+                    goalCtx.fill();
+                }
+        
+                if (gkZ !== null) {
+                    const y = goalCanvas.height - (gkZ / 2.44) * goalCanvas.height;
+                    goalCtx.beginPath();
+                    goalCtx.arc(300, y, 6, 0, Math.PI * 2);
+                    goalCtx.fillStyle = '#33cc33';
+                    goalCtx.fill();
+                }
+            }
+        
             drawGoalCanvas();
-            updateZStatus();
         });
-
-        function updateZStatus() {
-            const format = val => val !== null ? val.toFixed(2) + ' m' : 'Not set';
-            zStatus.textContent = `End Z: ${format(shotZ)}, GK Z: ${format(gkZ)}`;
-        }
-
-        function drawGoalCanvas() {
-            goalCtx.clearRect(0, 0, goalCanvas.width, goalCanvas.height);
-
-            // Dibujar portería
-            goalCtx.strokeStyle = 'white';
-            goalCtx.lineWidth = 4;
-            goalCtx.strokeRect(50, 10, 300, 220); // Estructura de la portería
-
-            // Dibujar posiciones
-            if (shotZ !== null) {
-                const y = goalCanvas.height - (shotZ / 2.44) * goalCanvas.height;
-                goalCtx.beginPath();
-                goalCtx.arc(100, y, 6, 0, Math.PI * 2);
-                goalCtx.fillStyle = '#ff4d4d';
-                goalCtx.fill();
-            }
-
-            if (gkZ !== null) {
-                const y = goalCanvas.height - (gkZ / 2.44) * goalCanvas.height;
-                goalCtx.beginPath();
-                goalCtx.arc(300, y, 6, 0, Math.PI * 2);
-                goalCtx.fillStyle = '#33cc33';
-                goalCtx.fill();
-            }
-        }
-
-        drawGoalCanvas(); // Inicializar
+         // Inicializar
 
     </script>More actions
 </body>
