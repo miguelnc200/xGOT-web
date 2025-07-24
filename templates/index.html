@@ -381,6 +381,8 @@
         let goalkeeperPosition = null;
         let endPosition = null;
         let state = 'ball'; // ball -> goalkeeper -> players
+        let shotZ = null;
+        let gkZ = null;
 
         // Initialize field
         drawField();
@@ -664,8 +666,6 @@
             const goalCtx = goalCanvas.getContext('2d');
             const zStatus = document.getElementById('zStatus');
         
-            let shotZ = null;
-            let gkZ = null;
             let zClickState = 'shot';
         
             goalCanvas.addEventListener('click', (event) => {
