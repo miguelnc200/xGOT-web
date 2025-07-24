@@ -283,17 +283,8 @@
                     <div class="legend-item">
                         <div class="color-box" style="background-color: #4da6ff;"></div>
                         <span>End position</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="color-box" style="background-color: rgba(51, 204, 51, 0.3);"></div>
-                        <span>GK effective area</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="color-box" style="background-color: rgba(77, 166, 255, 0.3);"></div>
-                        <span>End position</span>
-                    </div>
                     <div class = "legend-item">
-                       <div class="color-box" style="background-color: #4da6ff;"></div>
+                       <div class="color-box" style="background-color: #ffff00;"></div>
                         <span>End gk position</span> 
                     </div>
                 </div>
@@ -458,7 +449,7 @@
             playersStatus.style.color = endPosition ? "#4CAF50" : "#F44336";
 
             if (state === 'ready') {
-                playersStatus.textContent += " - Ready to calculate!";
+                gkendStatus.textContent += " - Ready to calculate!";
             }
             if (ballPosition) {
             const formattedTuple = `(${((canvasWidth / scaleX) - ballPosition.y).toFixed(2)}, ${((canvasHeight / scaleY) - ballPosition.x).toFixed(2)})`;
@@ -533,7 +524,7 @@
             ballPosition = null;
             goalkeeperPosition = null;
             goalkeeperendposition = null;
-            endPosition = [];
+            endPosition = null;
             shotZ = null;
             shotZ_x = null;
             gkZ = null;
@@ -596,9 +587,6 @@
 
             
             // Draw effective area if ball exists
-            if (ballPosition) {
-                drawEffectiveArea();
-            }
         }
 
 
@@ -621,13 +609,6 @@
             const canvasX = x * scaleX;
             const canvasY = canvasHeight - (y * scaleY);
 
-            // Draw effective area
-            const radius = 25;
-            ctx.beginPath();
-            ctx.arc(canvasX, canvasY, radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(51, 204, 51, 0.3)';
-            ctx.fill();
-
             // Draw goalkeeper
             ctx.beginPath();
             ctx.arc(canvasX, canvasY, 10, 0, Math.PI * 2);
@@ -638,17 +619,26 @@
             ctx.stroke();
         }
 
-        function drawPlayer(x, y) {
+        function drawGoalkeeper(x, y) {
             // Convert meters to pixels
             const canvasX = x * scaleX;
             const canvasY = canvasHeight - (y * scaleY);
 
-            // Draw effective area
-            const radius = 20;
+            // Draw goalkeeper
             ctx.beginPath();
-            ctx.arc(canvasX, canvasY, radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(77, 166, 255, 0.3)';
+            ctx.arc(canvasX, canvasY, 10, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffff00';
             ctx.fill();
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+        
+
+        function drawPlayer(x, y) {
+            // Convert meters to pixels
+            const canvasX = x * scaleX;
+            const canvasY = canvasHeight - (y * scaleY);
 
             // Draw player
             ctx.beginPath();
