@@ -588,6 +588,16 @@
             if (endPosition) {
                 drawPlayer(endPosition.y, endPosition.x);
             }
+            if (ballPosition && endPosition) {
+                ctx.beginPath();
+                ctx.moveTo(ballPosition.y * scaleX, canvasHeight - ballPosition.x * scaleY);
+                ctx.lineTo(endPosition.y * scaleX, canvasHeight - endPosition.x * scaleY);
+                ctx.strokeStyle = '#ffcc00'; // Amarillo
+                ctx.lineWidth = 3;
+                ctx.setLineDash([5, 5]); // Línea discontinua opcional
+                ctx.stroke();
+                ctx.setLineDash([]); // Reinicia el patrón de línea
+            }
 
             
             // Draw effective area if ball exists
