@@ -580,6 +580,10 @@
             if (goalkeeperPosition) {
                 drawGoalkeeper(goalkeeperPosition.y, goalkeeperPosition.x);
             }
+
+            if (goalkeeperendposition){
+                drawendGoalkeeper(goalkeeperPosition.y, goalkeeperPosition.x);
+            }
             
             if (endPosition) {
                 drawPlayer(endPosition.y, endPosition.x);
@@ -619,7 +623,7 @@
             ctx.stroke();
         }
 
-        function drawGoalkeeper(x, y) {
+        function drawendGoalkeeper(x, y) {
             // Convert meters to pixels
             const canvasX = x * scaleX;
             const canvasY = canvasHeight - (y * scaleY);
