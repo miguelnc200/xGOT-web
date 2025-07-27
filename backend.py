@@ -18,7 +18,7 @@ def calculate_xsit():
         end_pos = np.array(data["end_pos"])                # 3D
         portero_end = np.array(data["porterofin"])
 
-        xgot = compute_xgot_modified(balon_pos, portero, end_pos, portero_end)
+        xgot = compute_xgot_modified(balon_pos, portero, end_pos)
 
         return jsonify({'xsit': round(float(xgot), 2)})
     except Exception as e:
