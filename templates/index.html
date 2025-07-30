@@ -299,14 +299,21 @@
                 <div class="legend">
                     <div class="legend-item">
                         <div class="color-box" style="background-color: #ff4d4d;"></div>
-                        <span>Ball final position</span>
+                        <span>Ball</span>
                     </div>
                     <div class="legend-item">
                         <div class="color-box" style="background-color: #33cc33;"></div>
+                        <span>GK</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: #4da6ff;"></div>
+                        <span>Ball final position</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: #ffff00;"></div>
                         <span>GK final position</span>
                     </div>
                 </div>
-                <div class="status" id="zStatus">End Z: Not set, GK Z: Not set</div>
             </div>
             
             <div class="panel">
@@ -384,9 +391,13 @@
         let endPosition = null;
         let state = 'ball'; // ball -> goalkeeper -> players
         let shotZ = null;
+        let fshotZ =null;
+        let fshotZ_x = null;
         let shotZ_x = null;
         let gkZ = null;
         let gkZ_x = null;
+        let fgkZ = null;
+        let fgkZ_x = null;
 
         // Initialize field
         drawField();
@@ -529,6 +540,10 @@
             shotZ_x = null;
             gkZ = null;
             gkZ_x = null;
+            fshotZ = null;
+            fshotZ_x = null;
+            fgkZ = null;
+            fgkZ_x = null;
             state = 'ball';
             xsitValue.textContent = "0.00";
             xsitValue.style.color = "#4da6ff";
@@ -704,20 +719,26 @@
                     shotZ = z;
                     shotZ_x = x;
                     zClickState = 'gk';
-                } else {
+                }
+                if (zClickState === 'gk'){
                     gkZ = z;
                     gkZ_x = x;
+                    zClickState = 'shotf';
+                }
+                if (zClickState === 'fshot') {
+                    fshotZ = z;
+                    fshotZ_x = x;
+                    zClickState = 'gk';
+                }
+                if (zClickState === 'fgk'){
+                    fgkZ = z;
+                    fgkZ_x = x;
                     zClickState = 'shot';
                 }
         
                 drawGoalCanvas();
                 updateZStatus();
             });
-        
-            function updateZStatus() {
-                const format = val => val !== null ? val.toFixed(2) + ' m' : 'Not set';
-                zStatus.textContent = `End Z: ${format(shotZ)}, GK Z: ${format(gkZ)}`;
-            }
         
             function drawGoalCanvas() {
                 goalCtx.clearRect(0, 0, goalCanvas.width, goalCanvas.height);
@@ -738,6 +759,22 @@
                     const y = goalCanvas.height - (gkZ / 2.44) * goalCanvas.height;
                     goalCtx.beginPath();
                     goalCtx.arc(gkZ_x, y, 6, 0, Math.PI * 2);
+                    goalCtx.fillStyle = '#33cc33';
+                    goalCtx.fill();
+                }
+                if (fshotZ !== null) {
+                    const y = goalCanvas.height - (fshotZ / 2.44) * goalCanvas.height;
+                    const x = goalCanvas.width - (fshotZ / 2.44) * goalCanvas.width;
+                    goalCtx.beginPath();
+                    goalCtx.arc(fshotZ_x, y, 6, 0, Math.PI * 2);
+                    goalCtx.fillStyle = '#ff4d4d';
+                    goalCtx.fill();
+                }
+        
+                if (fgkZ !== null) {
+                    const y = goalCanvas.height - (fgkZ / 2.44) * goalCanvas.height;
+                    goalCtx.beginPath();
+                    goalCtx.arc(fgkZ_x, y, 6, 0, Math.PI * 2);
                     goalCtx.fillStyle = '#33cc33';
                     goalCtx.fill();
                 }
