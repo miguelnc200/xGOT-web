@@ -1,4 +1,4 @@
-e<!DOCTYPE html>More actions
+<!DOCTYPE html>More actions
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -306,11 +306,11 @@ e<!DOCTYPE html>More actions
                         <span>GK</span>
                     </div>
                     <div class="legend-item">
-                        <div class="color-box" style="background-color: #ff4d4d;"></div>
+                        <div class="color-box" style="background-color: #4da6ff;"></div>
                         <span>Ball final position</span>
                     </div>
                     <div class="legend-item">
-                        <div class="color-box" style="background-color: #33cc33;"></div>
+                        <div class="color-box" style="background-color: #ffff00;"></div>
                         <span>GK final position</span>
                     </div>
                 </div>
@@ -734,7 +734,7 @@ e<!DOCTYPE html>More actions
                     fshotZ_x = x;
                     zClickState = 'fgk';
                 }
-                else if (zClickState === 'gk'){
+                else if (zClickState === 'fgk'){
                     fgkZ = z;
                     fgkZ_x = x;
                     zClickState = 'shot';
@@ -777,7 +777,7 @@ e<!DOCTYPE html>More actions
                     const x = goalCanvas.width - (fshotZ / 2.44) * goalCanvas.width;
                     goalCtx.beginPath();
                     goalCtx.arc(fshotZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#ff4d4d';
+                    goalCtx.fillStyle = '#4da6ff';
                     goalCtx.fill();
                 }
 
@@ -785,7 +785,7 @@ e<!DOCTYPE html>More actions
                     const y = goalCanvas.height - (fgkZ / 2.44) * goalCanvas.height;
                     goalCtx.beginPath();
                     goalCtx.arc(fgkZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#33cc33';
+                    goalCtx.fillStyle = '#ffff00';
                     goalCtx.fill();
                 }
             }
