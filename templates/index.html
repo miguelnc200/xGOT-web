@@ -482,9 +482,11 @@
                 // Prepare data for backend
                 const end_pos_z = shotZ !== null ? shotZ : 1.22;
                 const gk_z = gkZ !== null ? gkZ : 1.0;
+                const fend_pos_z = fshotZ !== null ? fshotZ : 1.22;
+                const fgk_z = fgkZ !== null ? fgkZ : 1.0;
                 const data = {
-                    pos_balon: [ (canvasHeight/scaleY) - ballPosition.x, (canvasWidth/scaleX) - ballPosition.y,0.0],
-                    portero: [ (canvasHeight/scaleY) - goalkeeperPosition.x, (canvasWidth/scaleX) - goalkeeperPosition.y,0.0],
+                    pos_balon: [ (canvasHeight/scaleY) - ballPosition.x, (canvasWidth/scaleX) - ballPosition.y,fshotZ !== null ? fshotZ : 1.22],
+                    portero: [ (canvasHeight/scaleY) - goalkeeperPosition.x, (canvasWidth/scaleX) - goalkeeperPosition.y,fgk_z],
                     porterofin: [(canvasHeight/scaleY) - goalkeeperendposition.x, (canvasWidth/scaleX) - goalkeeperendposition.y,gk_z],
                     end_pos: [ (canvasHeight/scaleY) - endPosition.x, (canvasWidth/scaleX) - endPosition.y, shotZ !== null ? shotZ : 1.22 ]
                 };
@@ -767,7 +769,7 @@
                     const x = goalCanvas.width - (fshotZ / 2.44) * goalCanvas.width;
                     goalCtx.beginPath();
                     goalCtx.arc(fshotZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#ff4d4d';
+                    goalCtx.fillStyle = '#4da6ff';
                     goalCtx.fill();
                 }
         
@@ -775,7 +777,7 @@
                     const y = goalCanvas.height - (fgkZ / 2.44) * goalCanvas.height;
                     goalCtx.beginPath();
                     goalCtx.arc(fgkZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#33cc33';
+                    goalCtx.fillStyle = '#ffff00';
                     goalCtx.fill();
                 }
             }
