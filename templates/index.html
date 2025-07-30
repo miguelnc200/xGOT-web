@@ -270,7 +270,7 @@
                 <div class="canvas-container">
                     <canvas id="footballField" width="800" height="500"></canvas>
                 </div>
-                
+
                 <div class="legend">
                     <div class="legend-item">
                         <div class="color-box" style="background-color: #ff4d4d;"></div>
@@ -290,7 +290,7 @@
                 </div>
                 <button id="calculateBtn">Calculate xGOT</button>
             </div>
-            
+
             <div class="panel">
                     <h2 class="panel-title">Goal View (Z)</h2>
                     <div class="goal-container">
@@ -299,23 +299,24 @@
                 <div class="legend">
                     <div class="legend-item">
                         <div class="color-box" style="background-color: #ff4d4d;"></div>
-                        <span>Ball</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="color-box" style="background-color: #33cc33;"></div>
-                        <span>GK</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="color-box" style="background-color: #4da6ff;"></div>
                         <span>Ball final position</span>
                     </div>
                     <div class="legend-item">
-                        <div class="color-box" style="background-color: #ffff00;"></div>
+                        <div class="color-box" style="background-color: #33cc33;"></div>
+
+
+
+
+
+
+
+
                         <span>GK final position</span>
                     </div>
                 </div>
+                <div class="status" id="zStatus">End Z: Not set, GK Z: Not set</div>
             </div>
-            
+
             <div class="panel">
                 <h2 class="panel-title">Configuration</h2>
 
@@ -391,13 +392,13 @@
         let endPosition = null;
         let state = 'ball'; // ball -> goalkeeper -> players
         let shotZ = null;
-        let fshotZ =null;
-        let fshotZ_x = null;
+
+
         let shotZ_x = null;
         let gkZ = null;
         let gkZ_x = null;
-        let fgkZ = null;
-        let fgkZ_x = null;
+
+
 
         // Initialize field
         drawField();
@@ -482,11 +483,9 @@
                 // Prepare data for backend
                 const end_pos_z = shotZ !== null ? shotZ : 1.22;
                 const gk_z = gkZ !== null ? gkZ : 1.0;
-                const fend_pos_z = fshotZ !== null ? fshotZ : 1.22;
-                const fgk_z = fgkZ !== null ? fgkZ : 1.0;
                 const data = {
-                    pos_balon: [ (canvasHeight/scaleY) - ballPosition.x, (canvasWidth/scaleX) - ballPosition.y,fshotZ !== null ? fshotZ : 1.22],
-                    portero: [ (canvasHeight/scaleY) - goalkeeperPosition.x, (canvasWidth/scaleX) - goalkeeperPosition.y,fgk_z],
+                    pos_balon: [ (canvasHeight/scaleY) - ballPosition.x, (canvasWidth/scaleX) - ballPosition.y,0.0],
+                    portero: [ (canvasHeight/scaleY) - goalkeeperPosition.x, (canvasWidth/scaleX) - goalkeeperPosition.y,0.0],
                     porterofin: [(canvasHeight/scaleY) - goalkeeperendposition.x, (canvasWidth/scaleX) - goalkeeperendposition.y,gk_z],
                     end_pos: [ (canvasHeight/scaleY) - endPosition.x, (canvasWidth/scaleX) - endPosition.y, shotZ !== null ? shotZ : 1.22 ]
                 };
@@ -508,7 +507,7 @@
 
                 // Update UI with result
                 animateValue(0, result.xsit, 1500);
-                
+
             } catch (error) {
                 console.error('Error calculating xSIT:', error);
                 alert('Error connecting to backend. Make sure the server is running.');
@@ -542,10 +541,10 @@
             shotZ_x = null;
             gkZ = null;
             gkZ_x = null;
-            fshotZ = null;
-            fshotZ_x = null;
-            fgkZ = null;
-            fgkZ_x = null;
+
+
+
+
             state = 'ball';
             xsitValue.textContent = "0.00";
             xsitValue.style.color = "#4da6ff";
@@ -566,14 +565,14 @@
             ctx.lineWidth = 2;
             ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
 
-            
+
             // Goal areas
             ctx.strokeRect(canvasWidth/2-215,0 , 430,206);
-            
+
             // Goals
             ctx.fillStyle = 'white';
             ctx.fillRect(canvasWidth/2-39,0 ,78 ,5 );
-            
+
             // Penalty areas
             ctx.strokeRect(canvasWidth/2- 97.73,0, 195, 68.75);
 
@@ -593,7 +592,7 @@
             if (ballPosition) {
                 drawBall(ballPosition.y, ballPosition.x);
             }
-            
+
             if (goalkeeperPosition) {
                 drawGoalkeeper(goalkeeperPosition.y, goalkeeperPosition.x);
             }
@@ -601,7 +600,7 @@
             if (goalkeeperendposition){
                 drawendGoalkeeper(goalkeeperendposition.y, goalkeeperendposition.x);
             }
-            
+
             if (endPosition) {
                 drawPlayer(endPosition.y, endPosition.x);
             }
@@ -616,7 +615,7 @@
                 ctx.setLineDash([]); // Reinicia el patrón de línea
             }
 
-            
+
             // Draw effective area if ball exists
         }
 
@@ -664,7 +663,7 @@
             ctx.lineWidth = 2;
             ctx.stroke();
         }
-        
+
 
         function drawPlayer(x, y) {
             // Convert meters to pixels
@@ -707,46 +706,52 @@
             const goalCanvas = document.getElementById('goalCanvas');
             const goalCtx = goalCanvas.getContext('2d');
             const zStatus = document.getElementById('zStatus');
-        
+
             let zClickState = 'shot';
-        
+
             goalCanvas.addEventListener('click', (event) => {
                 const rect = goalCanvas.getBoundingClientRect();
                 const y = event.clientY - rect.top;
                 const x = event.clientX - rect.left;
-                
+
                 const z = ((goalCanvas.height - y) / goalCanvas.height) * 2.44;
-        
+
                 if (zClickState === 'shot') {
                     shotZ = z;
                     shotZ_x = x;
                     zClickState = 'gk';
-                }
-                if (zClickState === 'gk'){
+                } else {
+
                     gkZ = z;
                     gkZ_x = x;
-                    zClickState = 'shotf';
-                }
-                if (zClickState === 'fshot') {
-                    fshotZ = z;
-                    fshotZ_x = x;
-                    zClickState = 'gk';
-                }
-                if (zClickState === 'fgk'){
-                    fgkZ = z;
-                    fgkZ_x = x;
+
+
+
+
+
+
+
+
+
+
                     zClickState = 'shot';
                 }
-        
+
                 drawGoalCanvas();
+                updateZStatus();
             });
+
+            function updateZStatus() {
+                const format = val => val !== null ? val.toFixed(2) + ' m' : 'Not set';
+                zStatus.textContent = `End Z: ${format(shotZ)}, GK Z: ${format(gkZ)}`;
+            }
         
             function drawGoalCanvas() {
                 goalCtx.clearRect(0, 0, goalCanvas.width, goalCanvas.height);
                 goalCtx.strokeStyle = 'white';
                 goalCtx.lineWidth = 4;
                 goalCtx.strokeRect(50, 10, 300, 220);
-        
+
                 if (shotZ !== null) {
                     const y = goalCanvas.height - (shotZ / 2.44) * goalCanvas.height;
                     const x = goalCanvas.width - (shotZ / 2.44) * goalCanvas.width;
@@ -755,7 +760,7 @@
                     goalCtx.fillStyle = '#ff4d4d';
                     goalCtx.fill();
                 }
-        
+
                 if (gkZ !== null) {
                     const y = goalCanvas.height - (gkZ / 2.44) * goalCanvas.height;
                     goalCtx.beginPath();
@@ -763,24 +768,24 @@
                     goalCtx.fillStyle = '#33cc33';
                     goalCtx.fill();
                 }
-                if (fshotZ !== null) {
-                    const y = goalCanvas.height - (fshotZ / 2.44) * goalCanvas.height;
-                    const x = goalCanvas.width - (fshotZ / 2.44) * goalCanvas.width;
-                    goalCtx.beginPath();
-                    goalCtx.arc(fshotZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#4da6ff';
-                    goalCtx.fill();
-                }
-        
-                if (fgkZ !== null) {
-                    const y = goalCanvas.height - (fgkZ / 2.44) * goalCanvas.height;
-                    goalCtx.beginPath();
-                    goalCtx.arc(fgkZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#ffff00';
-                    goalCtx.fill();
-                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             }
-        
+
             drawGoalCanvas();
         });
          // Inicializar
