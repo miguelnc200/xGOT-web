@@ -1,4 +1,4 @@
-<!DOCTYPE html>More actions
+e<!DOCTYPE html>More actions
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -299,22 +299,22 @@
                 <div class="legend">
                     <div class="legend-item">
                         <div class="color-box" style="background-color: #ff4d4d;"></div>
+                        <span>Ball</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: #33cc33;"></div>
+                        <span>GK</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box" style="background-color: #ff4d4d;"></div>
                         <span>Ball final position</span>
                     </div>
                     <div class="legend-item">
                         <div class="color-box" style="background-color: #33cc33;"></div>
-
-
-
-
-
-
-
-
                         <span>GK final position</span>
                     </div>
                 </div>
-                <div class="status" id="zStatus">End Z: Not set, GK Z: Not set</div>
+                <div class="status" id="zStatus">Ball Z: Not set, GK Z: Not Set, End Z: Not set, GK Z: Not set</div>
             </div>
 
             <div class="panel">
@@ -392,11 +392,13 @@
         let endPosition = null;
         let state = 'ball'; // ball -> goalkeeper -> players
         let shotZ = null;
-
-
+        let fshotZ = null;
+        let fshotZ_x= null;
         let shotZ_x = null;
         let gkZ = null;
         let gkZ_x = null;
+        let fgkZ =null;
+        let fgkZ_x= null;
 
 
 
@@ -541,10 +543,10 @@
             shotZ_x = null;
             gkZ = null;
             gkZ_x = null;
-
-
-
-
+            fshotZ = null;
+            fshotZ_x = null;
+            fgkZ = null;
+            fgkZ_x = null;
             state = 'ball';
             xsitValue.textContent = "0.00";
             xsitValue.style.color = "#4da6ff";
@@ -720,20 +722,21 @@
                     shotZ = z;
                     shotZ_x = x;
                     zClickState = 'gk';
-                } else {
+                }
+                if (zClickState === 'gk'){
 
                     gkZ = z;
                     gkZ_x = x;
-
-
-
-
-
-
-
-
-
-
+                    zClickState = 'fshot';
+                }
+                if (zClickState === 'fshot'){
+                    fshotZ = z;
+                    fshotZ_x = x;
+                    zClickState = 'fgk';
+                }
+                if (zClickState === 'gk'){
+                    fgkZ = z;
+                    fgkZ_x = x;
                     zClickState = 'shot';
                 }
 
@@ -743,7 +746,7 @@
 
             function updateZStatus() {
                 const format = val => val !== null ? val.toFixed(2) + ' m' : 'Not set';
-                zStatus.textContent = `End Z: ${format(shotZ)}, GK Z: ${format(gkZ)}`;
+                zStatus.textContent = `Ball Z: ${format(shotZ)}, GK Z: ${format(gkZ)} End Z: ${format(fshotZ)}, GK Z: ${format(fgkZ)}`;
             }
         
             function drawGoalCanvas() {
@@ -768,22 +771,23 @@
                     goalCtx.fillStyle = '#33cc33';
                     goalCtx.fill();
                 }
+                
+                if (fshotZ !== null) {
+                    const y = goalCanvas.height - (fshotZ / 2.44) * goalCanvas.height;
+                    const x = goalCanvas.width - (fshotZ / 2.44) * goalCanvas.width;
+                    goalCtx.beginPath();
+                    goalCtx.arc(fshotZ_x, y, 6, 0, Math.PI * 2);
+                    goalCtx.fillStyle = '#ff4d4d';
+                    goalCtx.fill();
+                }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                if (fgkZ !== null) {
+                    const y = goalCanvas.height - (fgkZ / 2.44) * goalCanvas.height;
+                    goalCtx.beginPath();
+                    goalCtx.arc(fgkZ_x, y, 6, 0, Math.PI * 2);
+                    goalCtx.fillStyle = '#33cc33';
+                    goalCtx.fill();
+                }
             }
 
             drawGoalCanvas();
