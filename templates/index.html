@@ -358,6 +358,12 @@
             <div class="xsit-value" id="xsitValue">0.00</div>
             <div class="xsit-label">Ball position:</div>
             <div class="xsit-value" id="ballpos">(0.00,0.00)</div>
+            <div class="xsit-label">End ball position:</div>
+            <div class="xsit-value" id="endballpos">(0.00,0.00)</div>
+            <div class="xsit-label">GK position:</div>
+            <div class="xsit-value" id="gkpos">(0.00,0.00)</div>
+            <div class="xsit-label">End GK position:</div>
+            <div class="xsit-value" id="endgkpos">(0.00,0.00)</div>
         </div>
     </div>
 
@@ -370,6 +376,9 @@
         const playersStatus = document.getElementById('playersStatus');
         const xsitValue = document.getElementById('xsitValue');
         const ballpos = document.getElementById('ballpos');
+        const endballpos = document.getElementById('endballpos');
+        const gkpos = document.getElementById('gkpos');
+        const endgkpos = document.getElementById('endgkpos');
         const calculateBtn = document.getElementById('calculateBtn');
         const resetBtn = document.getElementById('resetBtn');
         const shotSpeedInput = document.getElementById('shotSpeed');
@@ -466,7 +475,7 @@
                 gkendStatus.textContent += " - Ready to calculate!";
             }
             if (ballPosition) {
-            const formattedTuple = `(${((canvasWidth / scaleX) - ballPosition.y).toFixed(2)}, ${((canvasHeight / scaleY) - ballPosition.x).toFixed(2)})`;
+            const formattedTuple = `(${((canvasWidth / scaleX) - ballPosition.y).toFixed(2)}, ${((canvasHeight / scaleY) - ballPosition.x).toFixed(2)},shotZ !== null ? shotZ : 0.0)`;
             ballpos.textContent = formattedTuple;
             ballpos.style.color = "#ffffff";
             } else {
@@ -474,6 +483,36 @@
                 ballpos.style.color = "#888888";
             }
             ballStatus.style.color = ballPosition ? "#4CAF50" : "#F44336";
+            
+            if (endPosition) {
+            const formattedTuple = `(${((canvasWidth / scaleX) - endPosition.y).toFixed(2)}, ${((canvasHeight / scaleY) - endPosition.x).toFixed(2)},fshotZ !== null ? fshotZ : 0.0)`;
+            endballpos.textContent = formattedTuple;
+            endballpos.style.color = "#ffffff";
+            } else {
+                endballpos.textContent = "(0.00, 0.00)";
+                endballpos.style.color = "#888888";
+            }
+            ballStatus.style.color = endPosition ? "#4CAF50" : "#F44336";
+            
+            if (goalkeeperPosition) {
+            const formattedTuple = `(${((canvasWidth / scaleX) - goalkeeperPosition.y).toFixed(2)}, ${((canvasHeight / scaleY) - goalkeeperPosition.x).toFixed(2)},gkZ !== null ? gkZ : 0.0)`;
+            gkpos.textContent = formattedTuple;
+            gkpos.style.color = "#ffffff";
+            } else {
+                gkpos.textContent = "(0.00, 0.00)";
+                gkpos.style.color = "#888888";
+            }
+            ballStatus.style.color = goalkeeperPosition ? "#4CAF50" : "#F44336";
+            
+            if (goalkeeperendposition) {
+            const formattedTuple = `(${((canvasWidth / scaleX) - goalkeeperendposition.y).toFixed(2)}, ${((canvasHeight / scaleY) - goalkeeperendposition.x).toFixed(2)},fgkZ !== null ? fgkZ : 0.0)`;
+            endgkpos.textContent = formattedTuple;
+            endgkpos.style.color = "#ffffff";
+            } else {
+                endgkpos.textContent = "(0.00, 0.00)";
+                endgkpos.style.color = "#888888";
+            }
+            ballStatus.style.color = goalkeeperendposition ? "#4CAF50" : "#F44336";
         }
 
         async function calculateXSIT() {
@@ -483,13 +522,15 @@
                 const shotSpeed = parseFloat(shotSpeedInput.value);
 
                 // Prepare data for backend
-                const end_pos_z = shotZ !== null ? shotZ : 1.22;
-                const gk_z = gkZ !== null ? gkZ : 1.0;
+                const end_pos_z = shotZ !== null ? shotZ : 0.0;
+                const gk_z = gkZ !== null ? gkZ : 0.0;
+                const pos_z =fshotZ !== null ? fshotZ : 0.0;
+                const end_gk_z=shotZ !== null ? shotZ : 0.0;
                 const data = {
-                    pos_balon: [ (canvasHeight/scaleY) - ballPosition.x, (canvasWidth/scaleX) - ballPosition.y,0.0],
-                    portero: [ (canvasHeight/scaleY) - goalkeeperPosition.x, (canvasWidth/scaleX) - goalkeeperPosition.y,0.0],
-                    porterofin: [(canvasHeight/scaleY) - goalkeeperendposition.x, (canvasWidth/scaleX) - goalkeeperendposition.y,gk_z],
-                    end_pos: [ (canvasHeight/scaleY) - endPosition.x, (canvasWidth/scaleX) - endPosition.y, shotZ !== null ? shotZ : 1.22 ]
+                    pos_balon: [ (canvasHeight/scaleY) - ballPosition.x, (canvasWidth/scaleX) - ballPosition.y,shotZ !== null ? shotZ : 0.0],
+                    portero: [ (canvasHeight/scaleY) - goalkeeperPosition.x, (canvasWidth/scaleX) - goalkeeperPosition.y,gkZ !== null ? gkZ : 0.0],
+                    porterofin: [(canvasHeight/scaleY) - goalkeeperendposition.x, (canvasWidth/scaleX) - goalkeeperendposition.y,fgkZ !== null ? fgkZ : 0.0],
+                    end_pos: [ (canvasHeight/scaleY) - endPosition.x, (canvasWidth/scaleX) - endPosition.y, fshotZ !== null ? fshotZ : 0.0]
                 };
                 console.log("Datos enviados:", data);
                 // Send request to backend
