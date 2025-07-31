@@ -475,7 +475,7 @@
                 gkendStatus.textContent += " - Ready to calculate!";
             }
             if (ballPosition) {
-            const formattedTuple = `(${((canvasWidth / scaleX) - ballPosition.y).toFixed(2)}, ${((canvasHeight / scaleY) - ballPosition.x).toFixed(2)},${shotZ !== null ? format(shotZ) : 0.0})`;
+            const formattedTuple = `(${((canvasWidth / scaleX) - ballPosition.y).toFixed(2)}, ${((canvasHeight / scaleY) - ballPosition.x).toFixed(2)},${shotZ !== null ? shotZ : 0.0})`;
             ballpos.textContent = formattedTuple;
             ballpos.style.color = "#ffffff";
             } else {
@@ -485,7 +485,7 @@
             ballStatus.style.color = ballPosition ? "#4CAF50" : "#F44336";
             
             if (endPosition) {
-            const formattedTuple = `(${((canvasWidth / scaleX) - endPosition.y).toFixed(2)}, ${((canvasHeight / scaleY) - endPosition.x).toFixed(2)},${fshotZ !== null ? format(fshotZ) : 0.0})`;
+            const formattedTuple = `(${((canvasWidth / scaleX) - endPosition.y).toFixed(2)}, ${((canvasHeight / scaleY) - endPosition.x).toFixed(2)},${fshotZ !== null ? fshotZ : 0.0})`;
             endballpos.textContent = formattedTuple;
             endballpos.style.color = "#ffffff";
             } else {
@@ -495,7 +495,7 @@
             ballStatus.style.color = endPosition ? "#4CAF50" : "#F44336";
             
             if (goalkeeperPosition) {
-            const formattedTuple = `(${((canvasWidth / scaleX) - goalkeeperPosition.y).toFixed(2)}, ${((canvasHeight / scaleY) - goalkeeperPosition.x).toFixed(2)},${gkZ !== null ? format(gkZ) : 0.0})`;
+            const formattedTuple = `(${((canvasWidth / scaleX) - goalkeeperPosition.y).toFixed(2)}, ${((canvasHeight / scaleY) - goalkeeperPosition.x).toFixed(2)},${gkZ !== null ? gkZ : 0.0})`;
             gkpos.textContent = formattedTuple;
             gkpos.style.color = "#ffffff";
             } else {
@@ -505,7 +505,7 @@
             ballStatus.style.color = goalkeeperPosition ? "#4CAF50" : "#F44336";
             
             if (goalkeeperendposition) {
-            const formattedTuple = `(${((canvasWidth / scaleX) - goalkeeperendposition.y).toFixed(2)}, ${((canvasHeight / scaleY) - goalkeeperendposition.x).toFixed(2)},${fgkZ !== null ? format(fgkZ) : 0.0})`;
+            const formattedTuple = `(${((canvasWidth / scaleX) - goalkeeperendposition.y).toFixed(2)}, ${((canvasHeight / scaleY) - goalkeeperendposition.x).toFixed(2)},${fgkZ !== null ? fgkZ : 0.0})`;
             endgkpos.textContent = formattedTuple;
             endgkpos.style.color = "#ffffff";
             } else {
