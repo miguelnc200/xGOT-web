@@ -24,7 +24,7 @@
             padding: 10px;
         }
         #goalCanvas {
-            background-image: url('https://i.imgur.com/gd2Jkd8.jpeg'); /* ✅ Esta sí funciona */
+            background-image: url('https://i.imgur.com/tapZGue.png'); /* ✅ Esta sí funciona */
             background-repeat: no-repeat;
             background-size: contain; /* O `contain` si prefieres ajuste */
             background-position: center;
@@ -443,7 +443,7 @@
             switch(state) {
                 case 'ball':
                     ballPosition = { x: fieldY, y: fieldX };
-                    state = 'goalkeeper';
+                    state = 'end';
                     break;
                 case 'goalkeeper':
                     goalkeeperPosition = { x: fieldY, y: fieldX };
@@ -451,11 +451,11 @@
                     break;
                 case 'endgk':
                     goalkeeperendposition = { x: fieldY, y: fieldX };
-                    state = 'end';
+                    state = 'ready';
                     break;
                 case 'end':
                     endPosition = {x: fieldY, y: fieldX};
-                    state= 'ready'
+                    state= 'goalkeeper'
                     break;
             }
 
@@ -767,18 +767,18 @@
                 if (zClickState === 'shot') {
                     shotZ = z;
                     shotZ_x = x;
-                    zClickState = 'gk';
+                    zClickState = 'fshot';
                 }
                 else if (zClickState === 'gk'){
 
                     gkZ = z;
                     gkZ_x = x;
-                    zClickState = 'fshot';
+                    zClickState = 'fgk';
                 }
                 else if (zClickState === 'fshot'){
                     fshotZ = z;
                     fshotZ_x = x;
-                    zClickState = 'fgk';
+                    zClickState = 'gk';
                 }
                 else if (zClickState === 'fgk'){
                     fgkZ = z;
@@ -844,6 +844,7 @@
     </script>More actions
 </body>
 </html>
+
 
 
 
