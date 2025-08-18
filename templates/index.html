@@ -299,23 +299,15 @@
                     </div>
                 <div class="legend">
                     <div class="legend-item">
-                        <div class="color-box" style="background-color: #ff4d4d;"></div>
-                        <span>Ball</span>
-                    </div>
-                    <div class="legend-item">
                         <div class="color-box" style="background-color: #4da6ff;"></div>
                         <span>Ball final position</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="color-box" style="background-color: #33cc33;"></div>
-                        <span>GK</span>
                     </div>
                     <div class="legend-item">
                         <div class="color-box" style="background-color: #ffff00;"></div>
                         <span>GK final position</span>
                     </div>
                 </div>
-                <div class="status" id="zStatus">Ball Z: Not set, GK Z: Not Set, End Z: Not set, GK Z: Not set</div>
+                <div class="status" id="zStatus"> Not Set, End Z: Not set, GK Z: Not set</div>
             </div>
 
             <div class="panel">
@@ -751,7 +743,7 @@
             const goalCtx = goalCanvas.getContext('2d');
             const zStatus = document.getElementById('zStatus');
 
-            let zClickState = 'shot';
+            let zClickState = 'fshot';
 
             goalCanvas.addEventListener('click', (event) => {
                 const rect = goalCanvas.getBoundingClientRect();
@@ -774,12 +766,12 @@
                 else if (zClickState === 'fshot'){
                     fshotZ = z;
                     fshotZ_x = x;
-                    zClickState = 'gk';
+                    zClickState = 'fgk';
                 }
                 else if (zClickState === 'fgk'){
                     fgkZ = z;
                     fgkZ_x = x;
-                    zClickState = 'shot';
+                    zClickState = 'fshot';
                 }
 
                 drawGoalCanvas();
@@ -789,7 +781,7 @@
 
             function updateZStatus() {
                 const format = val => val !== null ? val.toFixed(2) + ' m' : 'Not set';
-                zStatus.textContent = `Ball Z: ${format(shotZ)}, GK Z: ${format(gkZ)} End Z: ${format(fshotZ)}, GK Z: ${format(fgkZ)}`;
+                zStatus.textContent = `End Z: ${format(fshotZ)}, GK Z: ${format(fgkZ)}`;
             }
         
             function drawGoalCanvas() {
@@ -839,6 +831,7 @@
     </script>More actions
 </body>
 </html>
+
 
 
 
