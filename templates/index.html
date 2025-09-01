@@ -284,12 +284,12 @@
                         <div class="color-box" style="background-color: #33cc33;"></div>
                         <span>GK</span>
                     </div>
-                    
+
                     <div class = "legend-item">
                        <div class="color-box" style="background-color: #ffff00;"></div>
                         <span>End gk position</span> 
                     </div>
-                
+
             </div>
 
             <div class="panel">
@@ -401,35 +401,6 @@
         let gkZ_x = null;
         let fgkZ =null;
         let fgkZ_x= null;
-        // Tamaño del icono en el canvas (en píxeles)
-        const ICON_SIZE = 24;
-        const HALF_ICON = ICON_SIZE / 2;
-        
-        // Precarga de imágenes
-        const icons = {
-            shot: new Image(),
-            gk: new Image(),
-            fshot: new Image(),
-            fgk: new Image()
-        };
-        
-        // Rutas de ejemplo (cámbialas por las tuyas)
-        icons.shot.src  = 'https://imgur.com/a/HrYwfME';        // disparo (rojo)
-        icons.gk.src    = 'https://imgur.com/a/gNysm0g';      // portero (verde)
-        icons.fshot.src = 'https://imgur.com/a/HrYwfME';    // fin balón (azul)
-        icons.fgk.src   = 'https://imgur.com/a/gNysm0g';  // fin portero (amarillo)
-        
-        // Para saber si ya cargaron
-        let iconsLoaded = 0;
-        Object.values(icons).forEach(img => {
-            img.onload = () => { 
-                iconsLoaded++; 
-        // Redibuja cuando estén todos listos
-                if (iconsLoaded === 4 && typeof drawGoalCanvas === 'function') drawGoalCanvas();
-            };
-        });
-
-
 
         // Initialize field
         drawField();
@@ -503,7 +474,7 @@
                 ballpos.style.color = "#888888";
             }
             ballStatus.style.color = ballPosition ? "#4CAF50" : "#F44336";
-            
+
             if (endPosition) {
             const formattedTuple = `(${((canvasWidth / scaleX) - endPosition.y).toFixed(2)}, ${((canvasHeight / scaleY) - endPosition.x).toFixed(2)},${(fshotZ !== null ? fshotZ : 0.0).toFixed(2)})`;
             endballpos.textContent = formattedTuple;
@@ -513,7 +484,7 @@
                 endballpos.style.color = "#888888";
             }
             ballStatus.style.color = endPosition ? "#4CAF50" : "#F44336";
-            
+
             if (goalkeeperPosition) {
             const formattedTuple = `(${((canvasWidth / scaleX) - goalkeeperPosition.y).toFixed(2)}, ${((canvasHeight / scaleY) - goalkeeperPosition.x).toFixed(2)},${(gkZ !== null ? gkZ : 0.0).toFixed(2)})`;
             gkpos.textContent = formattedTuple;
@@ -523,7 +494,7 @@
                 gkpos.style.color = "#888888";
             }
             ballStatus.style.color = goalkeeperPosition ? "#4CAF50" : "#F44336";
-            
+
             if (goalkeeperendposition) {
             const formattedTuple = `(${((canvasWidth / scaleX) - goalkeeperendposition.y).toFixed(2)}, ${((canvasHeight / scaleY) - goalkeeperendposition.x).toFixed(2)},${(fgkZ !== null ? fgkZ : 0.0).toFixed(2)})`;
             endgkpos.textContent = formattedTuple;
@@ -810,61 +781,54 @@
                 const format = val => val !== null ? val.toFixed(2) + ' m' : 'Not set';
                 zStatus.textContent = `End Z: ${format(fshotZ)}, GK Z: ${format(fgkZ)}`;
             }
-        
+
             function drawGoalCanvas() {
                 goalCtx.clearRect(0, 0, goalCanvas.width, goalCanvas.height);
                 goalCtx.strokeStyle = 'white';
                 goalCtx.lineWidth = 4;
-                
-                // Helper para dibujar icono centrado
-                const drawIcon = (img, x, y) => {
-                if (img && img.complete) {
-                  goalCtx.drawImage(img, x - HALF_ICON, y - HALF_ICON, ICON_SIZE, ICON_SIZE);
-                } else {
-                  // Fallback si aún no cargó: un círculo pequeño
-                  goalCtx.beginPath();
-                  goalCtx.arc(x, y, 6, 0, Math.PI * 2);
-                  goalCtx.fillStyle = '#ddd';
-                  goalCtx.fill();
-                }
-                };
-                
-                // Disparo inicial (shotZ) -> icono "shot"
+
                 if (shotZ !== null) {
-                const y = goalCanvas.height - (shotZ / 2.44) * goalCanvas.height;
-                drawIcon(icons.shot, shotZ_x, y);
-                }
-                
-                // Portero inicial (gkZ) -> icono "gk"
-                if (gkZ !== null) {
-                const y = goalCanvas.height - (gkZ / 2.44) * goalCanvas.height;
-                drawIcon(icons.gk, gkZ_x, y);
-                }
-                
-                // Fin balón (fshotZ) -> icono "fshot"
-                if (fshotZ !== null) {
-                const y = goalCanvas.height - (fshotZ / 2.44) * goalCanvas.height;
-                drawIcon(icons.fshot, fshotZ_x, y);
-                }
-                
-                // Fin portero (fgkZ) -> icono "fgk"
-                if (fgkZ !== null) {
-                const y = goalCanvas.height - (fgkZ / 2.44) * goalCanvas.height;
-                drawIcon(icons.fgk, fgkZ_x, y);
-                }
+                    const y = goalCanvas.height - (shotZ / 2.44) * goalCanvas.height;
+                    const x = goalCanvas.width - (shotZ / 2.44) * goalCanvas.width;
+                    goalCtx.beginPath();
+                    goalCtx.arc(shotZ_x, y, 6, 0, Math.PI * 2);
+                    goalCtx.fillStyle = '#ff4d4d';
+                    goalCtx.fill();
                 }
 
+
+                if (gkZ !== null) {
+                    const y = goalCanvas.height - (gkZ / 2.44) * goalCanvas.height;
+                    goalCtx.beginPath();
+                    goalCtx.arc(gkZ_x, y, 6, 0, Math.PI * 2);
+                    goalCtx.fillStyle = '#33cc33';
+                    goalCtx.fill();
+                }
+
+
+                if (fshotZ !== null) {
+                    const y = goalCanvas.height - (fshotZ / 2.44) * goalCanvas.height;
+                    const x = goalCanvas.width - (fshotZ / 2.44) * goalCanvas.width;
+                    goalCtx.beginPath();
+                    goalCtx.arc(fshotZ_x, y, 6, 0, Math.PI * 2);
+                    goalCtx.fillStyle = '#4da6ff';
+                    goalCtx.fill();
+                }
+
+
+                if (fgkZ !== null) {
+                    const y = goalCanvas.height - (fgkZ / 2.44) * goalCanvas.height;
+                    goalCtx.beginPath();
+                    goalCtx.arc(fgkZ_x, y, 6, 0, Math.PI * 2);
+                    goalCtx.fillStyle = '#ffff00';
+                    goalCtx.fill();
+                }
+            }
+
+            drawGoalCanvas();
+        });
          // Inicializar
 
     </script>More actions
 </body>
 </html>
-
-
-
-
-
-
-
-
-
