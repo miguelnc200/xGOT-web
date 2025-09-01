@@ -401,6 +401,33 @@
         let gkZ_x = null;
         let fgkZ =null;
         let fgkZ_x= null;
+        // Tamaño del icono en el canvas (en píxeles)
+        const ICON_SIZE = 24;
+        const HALF_ICON = ICON_SIZE / 2;
+        
+        // Precarga de imágenes
+        const icons = {
+            shot: new Image(),
+            gk: new Image(),
+            fshot: new Image(),
+            fgk: new Image()
+        };
+        
+        // Rutas de ejemplo (cámbialas por las tuyas)
+        icons.shot.src  = 'https://imgur.com/a/HrYwfME';        // disparo (rojo)
+        icons.gk.src    = 'https://imgur.com/a/gNysm0g';      // portero (verde)
+        icons.fshot.src = 'https://imgur.com/a/HrYwfME';    // fin balón (azul)
+        icons.fgk.src   = 'https://imgur.com/a/gNysm0g';  // fin portero (amarillo)
+        
+        // Para saber si ya cargaron
+        let iconsLoaded = 0;
+        Object.values(icons).forEach(img => {
+            img.onload = () => { 
+                iconsLoaded++; 
+        // Redibuja cuando estén todos listos
+                if (iconsLoaded === 4 && typeof drawGoalCanvas === 'function') drawGoalCanvas();
+            };
+        });
 
 
 
@@ -788,49 +815,51 @@
                 goalCtx.clearRect(0, 0, goalCanvas.width, goalCanvas.height);
                 goalCtx.strokeStyle = 'white';
                 goalCtx.lineWidth = 4;
-
-                if (shotZ !== null) {
-                    const y = goalCanvas.height - (shotZ / 2.44) * goalCanvas.height;
-                    const x = goalCanvas.width - (shotZ / 2.44) * goalCanvas.width;
-                    goalCtx.beginPath();
-                    goalCtx.arc(shotZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#ff4d4d';
-                    goalCtx.fill();
+                
+                // Helper para dibujar icono centrado
+                const drawIcon = (img, x, y) => {
+                if (img && img.complete) {
+                  goalCtx.drawImage(img, x - HALF_ICON, y - HALF_ICON, ICON_SIZE, ICON_SIZE);
+                } else {
+                  // Fallback si aún no cargó: un círculo pequeño
+                  goalCtx.beginPath();
+                  goalCtx.arc(x, y, 6, 0, Math.PI * 2);
+                  goalCtx.fillStyle = '#ddd';
+                  goalCtx.fill();
                 }
-
-                if (gkZ !== null) {
-                    const y = goalCanvas.height - (gkZ / 2.44) * goalCanvas.height;
-                    goalCtx.beginPath();
-                    goalCtx.arc(gkZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#33cc33';
-                    goalCtx.fill();
+                };
+                
+                // Disparo inicial (shotZ) -> icono "shot"
+                if (shotZ !== null) {
+                const y = goalCanvas.height - (shotZ / 2.44) * goalCanvas.height;
+                drawIcon(icons.shot, shotZ_x, y);
                 }
                 
+                // Portero inicial (gkZ) -> icono "gk"
+                if (gkZ !== null) {
+                const y = goalCanvas.height - (gkZ / 2.44) * goalCanvas.height;
+                drawIcon(icons.gk, gkZ_x, y);
+                }
+                
+                // Fin balón (fshotZ) -> icono "fshot"
                 if (fshotZ !== null) {
-                    const y = goalCanvas.height - (fshotZ / 2.44) * goalCanvas.height;
-                    const x = goalCanvas.width - (fshotZ / 2.44) * goalCanvas.width;
-                    goalCtx.beginPath();
-                    goalCtx.arc(fshotZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#4da6ff';
-                    goalCtx.fill();
+                const y = goalCanvas.height - (fshotZ / 2.44) * goalCanvas.height;
+                drawIcon(icons.fshot, fshotZ_x, y);
                 }
-
+                
+                // Fin portero (fgkZ) -> icono "fgk"
                 if (fgkZ !== null) {
-                    const y = goalCanvas.height - (fgkZ / 2.44) * goalCanvas.height;
-                    goalCtx.beginPath();
-                    goalCtx.arc(fgkZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#ffff00';
-                    goalCtx.fill();
+                const y = goalCanvas.height - (fgkZ / 2.44) * goalCanvas.height;
+                drawIcon(icons.fgk, fgkZ_x, y);
                 }
-            }
+                }
 
-            drawGoalCanvas();
-        });
          // Inicializar
 
     </script>More actions
 </body>
 </html>
+
 
 
 
