@@ -405,6 +405,7 @@
         // Initialize field
         drawField();
         updateStatus();
+        drawGoalCanvas();
 
         // Event listeners
         canvas.addEventListener('click', handleCanvasClick);
@@ -738,100 +739,97 @@
             ctx.lineWidth = 1;
             ctx.stroke();
         }
-        document.addEventListener("DOMContentLoaded", function () {
-            const goalCanvas = document.getElementById('goalCanvas');
-            const goalCtx = goalCanvas.getContext('2d');
-            const zStatus = document.getElementById('zStatus');
+        const goalCanvas = document.getElementById('goalCanvas');
+        const goalCtx = goalCanvas.getContext('2d');
+        const zStatus = document.getElementById('zStatus');
 
-            let zClickState = 'fshot';
+        let zClickState = 'fshot';
 
-            goalCanvas.addEventListener('click', (event) => {
-                const rect = goalCanvas.getBoundingClientRect();
-                const y = event.clientY - rect.top;
-                const x = event.clientX - rect.left;
+        goalCanvas.addEventListener('click', (event) => {
+            const rect = goalCanvas.getBoundingClientRect();
+            const y = event.clientY - rect.top;
+            const x = event.clientX - rect.left;
 
-                const z = ((goalCanvas.height - y) / goalCanvas.height) * 2.44;
+            const z = ((goalCanvas.height - y) / goalCanvas.height) * 2.44;
 
-                if (zClickState === 'shot') {
-                    shotZ = z;
-                    shotZ_x = x;
-                    zClickState = 'fshot';
-                }
-                else if (zClickState === 'gk'){
-
-                    gkZ = z;
-                    gkZ_x = x;
-                    zClickState = 'fshot';
-                }
-                else if (zClickState === 'fshot'){
-                    fshotZ = z;
-                    fshotZ_x = x;
-                    zClickState = 'gk';
-                }
-                else if (zClickState === 'fgk'){
-                    fgkZ = z;
-                    fgkZ_x = x;
-                    zClickState = 'fshot';
-                }
-
-                drawGoalCanvas();
-                updateZStatus();
-                updateStatus();
-            });
-
-            function updateZStatus() {
-                const format = val => val !== null ? val.toFixed(2) + ' m' : 'Not set';
-                zStatus.textContent = `End Z: ${format(fshotZ)}, GK Z: ${format(gkZ)}`;
+            if (zClickState === 'shot') {
+                shotZ = z;
+                shotZ_x = x;
+                zClickState = 'fshot';
             }
+            else if (zClickState === 'gk'){
 
-            function drawGoalCanvas() {
-                goalCtx.clearRect(0, 0, goalCanvas.width, goalCanvas.height);
-                goalCtx.strokeStyle = 'white';
-                goalCtx.lineWidth = 4;
-
-                if (shotZ !== null) {
-                    const y = goalCanvas.height - (shotZ / 2.44) * goalCanvas.height;
-                    const x = goalCanvas.width - (shotZ / 2.44) * goalCanvas.width;
-                    goalCtx.beginPath();
-                    goalCtx.arc(shotZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#ff4d4d';
-                    goalCtx.fill();
-                }
-
-
-                if (gkZ !== null) {
-                    const y = goalCanvas.height - (gkZ / 2.44) * goalCanvas.height;
-                    goalCtx.beginPath();
-                    goalCtx.arc(gkZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#33cc33';
-                    goalCtx.fill();
-                }
-
-
-                if (fshotZ !== null) {
-                    const y = goalCanvas.height - (fshotZ / 2.44) * goalCanvas.height;
-                    const x = goalCanvas.width - (fshotZ / 2.44) * goalCanvas.width;
-                    goalCtx.beginPath();
-                    goalCtx.arc(fshotZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#4da6ff';
-                    goalCtx.fill();
-                }
-
-
-                if (fgkZ !== null) {
-                    const y = goalCanvas.height - (fgkZ / 2.44) * goalCanvas.height;
-                    goalCtx.beginPath();
-                    goalCtx.arc(fgkZ_x, y, 6, 0, Math.PI * 2);
-                    goalCtx.fillStyle = '#ffff00';
-                    goalCtx.fill();
-                }
+                gkZ = z;
+                gkZ_x = x;
+                zClickState = 'fshot';
+            }
+            else if (zClickState === 'fshot'){
+                fshotZ = z;
+                fshotZ_x = x;
+                zClickState = 'gk';
+            }
+            else if (zClickState === 'fgk'){
+                fgkZ = z;
+                fgkZ_x = x;
+                zClickState = 'fshot';
             }
 
             drawGoalCanvas();
+            updateZStatus();
+            updateStatus();
         });
+
+        function updateZStatus() {
+            const format = val => val !== null ? val.toFixed(2) + ' m' : 'Not set';
+            zStatus.textContent = `End Z: ${format(fshotZ)}, GK Z: ${format(gkZ)}`;
+        }
+
+        function drawGoalCanvas() {
+            goalCtx.clearRect(0, 0, goalCanvas.width, goalCanvas.height);
+            goalCtx.strokeStyle = 'white';
+            goalCtx.lineWidth = 4;
+
+            if (shotZ !== null) {
+                const y = goalCanvas.height - (shotZ / 2.44) * goalCanvas.height;
+                const x = goalCanvas.width - (shotZ / 2.44) * goalCanvas.width;
+                goalCtx.beginPath();
+                goalCtx.arc(shotZ_x, y, 6, 0, Math.PI * 2);
+                goalCtx.fillStyle = '#ff4d4d';
+                goalCtx.fill();
+            }
+
+
+            if (gkZ !== null) {
+                const y = goalCanvas.height - (gkZ / 2.44) * goalCanvas.height;
+                goalCtx.beginPath();
+                goalCtx.arc(gkZ_x, y, 6, 0, Math.PI * 2);
+                goalCtx.fillStyle = '#33cc33';
+                goalCtx.fill();
+            }
+
+
+            if (fshotZ !== null) {
+                const y = goalCanvas.height - (fshotZ / 2.44) * goalCanvas.height;
+                const x = goalCanvas.width - (fshotZ / 2.44) * goalCanvas.width;
+                goalCtx.beginPath();
+                goalCtx.arc(fshotZ_x, y, 6, 0, Math.PI * 2);
+                goalCtx.fillStyle = '#4da6ff';
+                goalCtx.fill();
+            }
+
+
+            if (fgkZ !== null) {
+                const y = goalCanvas.height - (fgkZ / 2.44) * goalCanvas.height;
+                goalCtx.beginPath();
+                goalCtx.arc(fgkZ_x, y, 6, 0, Math.PI * 2);
+                goalCtx.fillStyle = '#ffff00';
+                goalCtx.fill();
+            }
+        }
          // Inicializar
 
     </script>More actions
 </body>
 </html>
+
 
