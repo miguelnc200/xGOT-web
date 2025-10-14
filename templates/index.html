@@ -783,16 +783,6 @@
             function updateZStatus() {
                 const format = val => val !== null ? val.toFixed(2) + ' m' : 'Not set';
                 zStatus.textContent = `End Z: ${format(fshotZ)}, GK Z: ${format(gkZ)}`;
-
-
-
-
-
-
-
-
-
-
             }
 
             function drawGoalCanvas() {
@@ -809,11 +799,6 @@
                     goalCtx.fill();
                 }
 
-
-
-
-
-
                 if (gkZ !== null) {
                     const y = goalCanvas.height - (gkZ / 2.44) * goalCanvas.height;
                     goalCtx.beginPath();
@@ -821,15 +806,6 @@
                     goalCtx.fillStyle = '#33cc33';
                     goalCtx.fill();
                 }
-
-
-
-
-
-
-
-
-
 
                 if (fshotZ !== null) {
                     const y = goalCanvas.height - (fshotZ / 2.44) * goalCanvas.height;
@@ -840,14 +816,6 @@
                     goalCtx.fill();
                 }
 
-
-
-
-
-
-
-
-
                 if (fgkZ !== null) {
                     const y = goalCanvas.height - (fgkZ / 2.44) * goalCanvas.height;
                     goalCtx.beginPath();
@@ -857,18 +825,13 @@
                 }
 
             }
-
+            window.updateZStatus = updateZStatus;
+            window.drawGoalCanvas = drawGoalCanvas;
             drawGoalCanvas();
         });
-
-
-
-
-
-
-
          // Inicializar
 
     </script>More actions
 </body>
 </html>
+
