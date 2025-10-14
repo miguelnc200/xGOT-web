@@ -303,8 +303,8 @@
                         <span>Ball final position</span>
                     </div>
                     <div class="legend-item">
-                        <div class="color-box" style="background-color: #ffff00;"></div>
-                        <span>GK final position</span>
+                        <div class="color-box" style="background-color: #33cc33;"></div>
+                        <span>GK position</span>
                     </div>
                 </div>
                 <div class="status" id="zStatus"> Not Set, End Z: Not set, GK Z: Not set</div>
@@ -583,6 +583,8 @@
             xsitValue.textContent = "0.00";
             xsitValue.style.color = "#4da6ff";
             drawField();
+            drawGoalCanvas();
+            updateZStatus();
             updateStatus();
         }
 
@@ -759,12 +761,12 @@
 
                     gkZ = z;
                     gkZ_x = x;
-                    zClickState = 'fgk';
+                    zClickState = 'fshot';
                 }
                 else if (zClickState === 'fshot'){
                     fshotZ = z;
                     fshotZ_x = x;
-                    zClickState = 'fgk';
+                    zClickState = 'gk';
                 }
                 else if (zClickState === 'fgk'){
                     fgkZ = z;
@@ -779,7 +781,7 @@
 
             function updateZStatus() {
                 const format = val => val !== null ? val.toFixed(2) + ' m' : 'Not set';
-                zStatus.textContent = `End Z: ${format(fshotZ)}, GK Z: ${format(fgkZ)}`;
+                zStatus.textContent = `End Z: ${format(fshotZ)}, GK Z: ${format(gkZ)}`;
             }
 
             function drawGoalCanvas() {
@@ -832,3 +834,4 @@
     </script>More actions
 </body>
 </html>
+
